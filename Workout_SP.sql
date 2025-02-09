@@ -78,10 +78,11 @@ CREATE PROCEDURE trainingapp.AddUser(
     p_Username VARCHAR(255),
     p_Email VARCHAR(255),
     p_Password VARCHAR(255),
-    p_CreatedBy VARCHAR(36),
     p_CreatedAt DATETIME,
     p_DeleteFlag BOOL)
 begin
-	INSERT INTO User (UserId, Firstname, Lastname, Username, Email, Password, CreatedBy, CreatedAt, DeleteFlag)
-    VALUES (p_UserId, p_Firstname, p_Lastname, p_Username, p_Email, p_Password, p_CreatedBy, p_CreatedAt, p_DeleteFlag );
+	INSERT INTO User (UserId, Firstname, Lastname, Username, Email, Password, CreatedAt, DeleteFlag)
+    VALUES (p_UserId, p_Firstname, p_Lastname, p_Username, p_Email, p_Password, p_CreatedAt, p_DeleteFlag );
+
+	SELECT p_UserId;
 end
