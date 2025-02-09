@@ -48,10 +48,7 @@ namespace TrainingApp.API.Controllers
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("role", "User"), // Roller eklenebilir
+                new Claim(JwtRegisteredClaimNames.PreferredUsername, user.Username),
             };
 
             var token = new JwtSecurityToken(
