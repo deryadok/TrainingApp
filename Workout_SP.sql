@@ -36,7 +36,9 @@ end
 
 CREATE PROCEDURE trainingapp.DeleteWorkout(IN p_WorkoutId CHAR(36))
 BEGIN
-    DELETE FROM Workout WHERE WorkoutId = p_WorkoutId;
+    UPDATE Workout 
+    SET DeleteFlag = TRUE 
+    WHERE WorkoutId = p_WorkoutId;
 end
 
 CREATE PROCEDURE trainingapp.GetAllWorkouts()

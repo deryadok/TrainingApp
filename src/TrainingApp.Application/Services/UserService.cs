@@ -21,6 +21,10 @@ namespace TrainingApp.Application.Services
         {
             var user = _mapper.Map<User>(userDto);
 
+            var hashedPassword = PasswordHelper.HashPassword(user.Username, user.Password);
+
+            user.Password = hashedPassword;
+
             var result = await _userRepository.AddUserAsync(user);
 
             return ResponseHelper<Guid>.GetResponse(result, true);

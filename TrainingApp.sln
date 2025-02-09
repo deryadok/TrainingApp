@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DDC487E7-349D-4C27-95BF-BCF36F594687}"
 EndProject
@@ -18,6 +18,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B2F50C4B-33D5-4147-90BB-97D49DA55FED}"
 	ProjectSection(SolutionItems) = preProject
 		Init_Db.sql = Init_Db.sql
+		User_SP.sql = User_SP.sql
 		Workout_SP.sql = Workout_SP.sql
 	EndProjectSection
 EndProject
