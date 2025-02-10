@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using TrainingApp.Application.Dtos.Region;
 using TrainingApp.Application.Dtos.Workout;
 using TrainingApp.Domain.Entities;
 using TrainingApp.Infrastructure.Interfaces;
+using TrainingApp.Shared.Constants;
 using TrainingApp.Shared.Helpers;
 using TrainingApp.Shared.Response;
 
@@ -32,7 +34,9 @@ namespace TrainingApp.Application.Services
 
             _ = await _workoutRegionRepository.BulkInsertWorkoutRegionsAsync(workoutRegions);
 
-            return ResponseHelper<Guid>.GetResponse(result, true);
+            var success = !result.Equals(Guid.Empty);
+
+            return ResponseHelper<Guid>.GetResponse(result, success, ResultMessages.InsertMessage, ResultMessages.FailMessage);
         }
 
         public async Task<ApiResponse<bool>> Update(WorkoutUpdateDto workoutDto)
@@ -45,7 +49,7 @@ namespace TrainingApp.Application.Services
 
             _ = await _workoutRegionRepository.BulkUpdateWorkoutRegionsAsync(workout.WorkoutId, workoutRegions);
 
-            return ResponseHelper<bool>.GetResponse(result, true);
+            return ResponseHelper<bool>.GetResponse(result, ResultMessages.UpdatedMessage, ResultMessages.FailMessage);
         }
 
         public async Task<ApiResponse<bool>> Delete(Guid workoutDto)
@@ -56,7 +60,28 @@ namespace TrainingApp.Application.Services
 
             _ = await _workoutRegionRepository.BulkSoftDeleteWorkoutRegionsAsync(workout.WorkoutId);
 
-            return ResponseHelper<bool>.GetResponse(result, true);
+            return ResponseHelper<bool>.GetResponse(result, ResultMessages.DeletedMessage, ResultMessages.FailMessage);
+        }
+
+        public async Task<ApiResponse<WorkoutDto>> GetWorkoutById(Guid id)
+        {
+            var returnModel = new WorkoutDto();
+
+            var workout = await _workoutRepository.GetWorkoutByIdAsync(id);
+
+            var regions = await _workoutRegionRepository.GetWorkoutRegionByIdAsync(id);
+
+            returnModel = _mapper.Map<WorkoutDto>(workout);
+            returnModel.Regions = _mapper.Map<List<RegionDto>>(regions);
+
+            bool success = workout != null;
+
+            return ResponseHelper<WorkoutDto>.GetResponse(returnModel, success, ResultMessages.SuccessMessage, ResultMessages.FailMessage);
+        }
+
+        public async Task<ApiResponse<WorkoutDto>> GetFilteredResult()
+        {
+            return null;
         }
     }
 }
