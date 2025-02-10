@@ -3,6 +3,8 @@ using System.Data;
 using TrainingApp.Infrastructure.Interfaces;
 using TrainingApp.Domain.Entities;
 using TrainingApp.Infrastructure.Data;
+using System.Text;
+using MySql.Data.MySqlClient;
 
 namespace TrainingApp.Infrastructure.Concrete
 {
@@ -32,6 +34,61 @@ namespace TrainingApp.Infrastructure.Concrete
                     parameters,
                     commandType: CommandType.Text
                 );
+            }
+        }
+
+        public async Task<bool> BulkInsertWorkoutRegionsAsync(List<WorkoutRegion> workoutRegions)
+        {
+            using (var connection = _dbContext.Connection)
+            {
+                var valuesBuilder = new StringBuilder();
+
+                foreach (var workoutRegion in workoutRegions)
+                {
+                    valuesBuilder.AppendFormat("('{0}', '{1}', '{2}', '{3}', NOW(), FALSE),",
+                    workoutRegion.WorkoutRegionId, workoutRegion.WorkoutId, workoutRegion.RegionId, workoutRegion.CreatedBy);
+                }
+
+                string values = valuesBuilder.ToString().TrimEnd(',');
+
+                int affectedRows = await connection.ExecuteScalarAsync<int>(
+                    "CALL BulkInsertWorkoutRegions(@Values);", new { Values = values });
+
+                return affectedRows > 0;
+            }
+        }
+
+        public async Task<bool> BulkUpdateWorkoutRegionsAsync(Guid workoutId, List<WorkoutRegion> workoutRegions)
+        {
+            using (var connection = _dbContext.Connection)
+            {
+                var updateBuilder = new StringBuilder();
+                foreach (var workoutRegion in workoutRegions)
+                {
+                    updateBuilder.AppendFormat("WHEN '{0}' THEN '{1}' ", workoutRegion.WorkoutRegionId, workoutRegion.RegionId);
+                }
+
+                string updateValues = updateBuilder.ToString();
+
+                var parameters = new DynamicParameters();
+                parameters.Add("@WorkoutId", workoutId);
+                parameters.Add("@Updates", updateValues);
+
+                int affectedRows = await connection.ExecuteAsync("CALL BulkUpdateWorkoutRegions(@WorkoutId, @Updates);", parameters);
+
+                return affectedRows > 0;
+            }
+        }
+
+        public async Task<bool> BulkSoftDeleteWorkoutRegionsAsync(Guid workoutId, List<Guid> regionIds)
+        {
+            using (var connection = _dbContext.Connection)
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@WorkoutId", workoutId);
+
+                int affectedRows = await connection.ExecuteAsync("CALL BulkSoftDeleteWorkoutRegions(@WorkoutId);", parameters);
+                return affectedRows > 0;
             }
         }
 

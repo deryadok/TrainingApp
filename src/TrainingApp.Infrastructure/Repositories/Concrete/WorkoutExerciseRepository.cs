@@ -1,7 +1,8 @@
 ﻿using Dapper;
 using System.Data;
-using TrainingApp.Infrastructure.Interfaces;
+using System.Text;
 using TrainingApp.Infrastructure.Data;
+using TrainingApp.Infrastructure.Interfaces;
 
 namespace TrainingApp.Infrastructure.Concrete
 {
@@ -31,6 +32,60 @@ namespace TrainingApp.Infrastructure.Concrete
                     parameters,
                     commandType: CommandType.Text
                 );
+            }
+        }
+
+        public async Task<bool> BulkInsertWorkoutExercisesAsync(List<WorkoutExercise> workoutExercises)
+        {
+            using (var connection = _dbContext.Connection)
+            {
+                var valuesBuilder = new StringBuilder();
+
+                foreach (var workoutExercise in workoutExercises)
+                {
+                    valuesBuilder.AppendFormat("('{0}', '{1}', '{2}', '{3}', NOW(), FALSE),",
+                    workoutExercise.WorkoutExerciseId, workoutExercise.WorkoutId, workoutExercise.ExerciseId, workoutExercise.CreatedBy);
+                }
+
+                string values = valuesBuilder.ToString().TrimEnd(',');
+
+                int affectedRows = await connection.ExecuteScalarAsync<int>(
+                    "CALL BulkInsertWorkoutRegions(@Values);", new { Values = values });
+
+                return affectedRows > 0;
+            }
+        }
+
+        public async Task<bool> BulkUpdateWorkoutExercisesAsync(Guid workoutId, List<WorkoutExercise> workoutExercises)
+        {
+            using (var connection = _dbContext.Connection)
+            {
+                var updateBuilder = new StringBuilder();
+                foreach (var workoutExercise in workoutExercises)
+                {
+                    updateBuilder.AppendFormat("WHEN '{0}' THEN '{1}' ", workoutExercise.WorkoutExerciseId, workoutExercise.ExerciseId);
+                }
+
+                string updateValues = updateBuilder.ToString();
+
+                var parameters = new DynamicParameters();
+                parameters.Add("@WorkoutId", workoutId);
+                parameters.Add("@Updates", updateValues);
+
+                int affectedRows = await connection.ExecuteAsync("CALL BulkUpdateWorkoutExercises(@WorkoutId, @Updates);", parameters);
+                return affectedRows > 0;
+            }
+        }
+
+        public async Task<bool> BulkSoftDeleteWorkoutExercisesAsync(Guid workoutId)
+        {
+            using (var connection = _dbContext.Connection)
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@WorkoutId", workoutId);
+
+                int affectedRows = await connection.ExecuteAsync("CALL BulkSoftDeleteWorkoutExercises(@WorkoutId);", parameters);
+                return affectedRows > 0;
             }
         }
 

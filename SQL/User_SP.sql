@@ -1,13 +1,13 @@
 ﻿CREATE PROCEDURE trainingapp.AddUser(
-    p_UserId CHAR(36),
-    p_Firstname VARCHAR(255),
-    p_Lastname VARCHAR(255),
-    p_Username VARCHAR(255),
-    p_Email VARCHAR(255),
-    p_Password VARCHAR(255),
-    p_CreatedBy CHAR(36),
-    p_CreatedAt DATETIME,
-    p_DeleteFlag BOOL
+    IN p_UserId CHAR(36),
+    IN p_Firstname VARCHAR(255),
+    IN p_Lastname VARCHAR(255),
+    IN p_Username VARCHAR(255),
+    IN p_Email VARCHAR(255),
+    IN p_Password VARCHAR(255),
+    IN p_CreatedBy CHAR(36),
+    IN p_CreatedAt DATETIME,
+    IN p_DeleteFlag BOOL
 )
 BEGIN
     INSERT INTO User (UserId, Firstname, Lastname, Username, Email, Password, CreatedBy, CreatedAt, DeleteFlag)
@@ -16,19 +16,19 @@ BEGIN
     SELECT p_UserId;
 END
 
-CREATE PROCEDURE trainingapp.GetUserById(p_UserId CHAR(36))
+CREATE PROCEDURE trainingapp.GetUserById(IN p_UserId CHAR(36))
 BEGIN
     SELECT * FROM User WHERE UserId = p_UserId AND DeleteFlag = FALSE;
 END
 
 CREATE PROCEDURE trainingapp.UpdateUser(
-    p_UserId CHAR(36),
-    p_Firstname VARCHAR(255),
-    p_Lastname VARCHAR(255),
-    p_Username VARCHAR(255),
-    p_Email VARCHAR(255),
-    p_UpdatedBy CHAR(36),
-    p_UpdatedAt DATETIME
+    IN p_UserId CHAR(36),
+    IN p_Firstname VARCHAR(255),
+    IN p_Lastname VARCHAR(255),
+    IN p_Username VARCHAR(255),
+    IN p_Email VARCHAR(255),
+    IN p_UpdatedBy CHAR(36),
+    IN p_UpdatedAt DATETIME
 )
 BEGIN
     UPDATE User
@@ -43,7 +43,7 @@ BEGIN
 	SELECT ROW_COUNT();
 END
 
-CREATE PROCEDURE trainingapp.DeleteUser(p_UserId CHAR(36))
+CREATE PROCEDURE trainingapp.DeleteUser(IN p_UserId CHAR(36))
 BEGIN
     UPDATE User 
     SET DeleteFlag = TRUE 
@@ -58,8 +58,8 @@ BEGIN
 END
 
 CREATE PROCEDURE trainingapp.LoginUser(
-    p_Username VARCHAR(255),
-    p_PasswordHash VARCHAR(255)
+    IN p_Username VARCHAR(255),
+    IN p_PasswordHash VARCHAR(255)
 )
 BEGIN
     DECLARE userExists INT;

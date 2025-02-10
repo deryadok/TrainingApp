@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE trainingapp.AddRegion(
-    p_RegionId CHAR(36),
-    p_Name VARCHAR(100),
-    p_Description VARCHAR(100),
-    p_CreatedBy CHAR(36),
-    p_CreatedAt DATETIME,
-    p_DeleteFlag BOOL
+    IN p_RegionId CHAR(36),
+    IN p_Name VARCHAR(100),
+    IN p_Description VARCHAR(100),
+    IN p_CreatedBy CHAR(36),
+    IN p_CreatedAt DATETIME,
+    IN p_DeleteFlag BOOL
 )
 BEGIN
     INSERT INTO Region (RegionId, Name, Description, CreatedBy, CreatedAt, DeleteFlag)
@@ -14,11 +14,11 @@ BEGIN
 END 
 
 CREATE PROCEDURE trainingapp.UpdateRegion(
-    p_RegionId CHAR(36),
-    p_Name VARCHAR(100),
-    p_Description VARCHAR(100),
-    p_UpdatedBy CHAR(36),
-    p_UpdatedAt DATETIME
+    IN p_RegionId CHAR(36),
+    IN p_Name VARCHAR(100),
+    IN p_Description VARCHAR(100),
+    IN p_UpdatedBy CHAR(36),
+    IN p_UpdatedAt DATETIME
 )
 BEGIN
     UPDATE Region
@@ -31,13 +31,13 @@ BEGIN
 	SELECT ROW_COUNT();
 END
 
-CREATE PROCEDURE trainingapp.DeleteRegion(p_RegionId CHAR(36))
+CREATE PROCEDURE trainingapp.DeleteRegion(IN p_RegionId CHAR(36))
 BEGIN
     UPDATE Region SET DeleteFlag = TRUE WHERE RegionId = p_RegionId;
 	SELECT ROW_COUNT();
 END
 
-CREATE PROCEDURE trainingapp.GetRegionById(p_RegionId CHAR(36))
+CREATE PROCEDURE trainingapp.GetRegionById(IN p_RegionId CHAR(36))
 BEGIN
     SELECT * FROM Region WHERE RegionId = p_RegionId AND DeleteFlag = FALSE;
 END

@@ -1,11 +1,11 @@
 ﻿CREATE PROCEDURE trainingapp.AddWorkout(
-	p_WorkoutId CHAR(36),
-    p_Name VARCHAR(255),
-    p_Duration INT,
-    p_Difficulty INT,
-    p_CreatedBy VARCHAR(36),
-    p_CreatedAt DATETIME,
-    p_DeleteFlag BOOL)
+	IN p_WorkoutId CHAR(36),
+    IN p_Name VARCHAR(255),
+    IN p_Duration INT,
+    IN p_Difficulty INT,
+    IN p_CreatedBy VARCHAR(36),
+    IN p_CreatedAt DATETIME,
+    IN p_DeleteFlag BOOL)
 begin
 	INSERT INTO Workout (WorkoutId, Name, Duration, Difficulty, CreatedBy, CreatedAt, DeleteFlag)
     VALUES (p_WorkoutId, p_Name, p_Duration, p_Difficulty, p_CreatedBy, p_CreatedAt, p_DeleteFlag );
@@ -19,12 +19,12 @@ BEGIN
 END 
 
 CREATE PROCEDURE trainingapp.UpdateWorkout(
-    p_WorkoutId CHAR(36),
-    p_Name VARCHAR(255),
-    p_Duration INT,
-    p_Difficulty INT,
-    p_UpdatedBy VARCHAR(36),
-    p_UpdatedAt DATETIME
+    IN p_WorkoutId CHAR(36),
+    IN p_Name VARCHAR(255),
+    IN p_Duration INT,
+    IN p_Difficulty INT,
+    IN p_UpdatedBy VARCHAR(36),
+    IN p_UpdatedAt DATETIME
 )
 BEGIN
     UPDATE Workout
@@ -53,9 +53,9 @@ BEGIN
 end
 
 CREATE PROCEDURE trainingapp.GetFilteredWorkouts(
-    p_Duration INT,
-    p_Difficulty INT,
-    p_RegionId VARCHAR(36)
+    IN p_Duration INT,
+    IN p_Difficulty INT,
+    IN p_RegionId VARCHAR(36)
 )
 BEGIN
     SELECT * FROM Workout w

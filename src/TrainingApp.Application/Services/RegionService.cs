@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TrainingApp.Application.Dtos;
+using TrainingApp.Application.Dtos.Region;
 using TrainingApp.Domain.Entities;
 using TrainingApp.Infrastructure.Interfaces;
 using TrainingApp.Shared.Helpers;
@@ -19,7 +19,7 @@ namespace TrainingApp.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ApiResponse<Guid>> AddRegion(RegionDto regionDto)
+        public async Task<ApiResponse<Guid>> AddRegion(RegionInsertDto regionDto)
         {
             var region = _mapper.Map<Region>(regionDto);
 

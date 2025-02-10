@@ -9,5 +9,8 @@ namespace TrainingApp.Infrastructure.Interfaces
         Task<WorkoutRegion> GetWorkoutRegionByIdAsync(Guid id);
         Task<bool> UpdateWorkoutRegionAsync(WorkoutRegion WorkoutRegion);
         Task<bool> DeleteWorkoutRegionAsync(Guid id);
+        Task<bool> BulkInsertWorkoutRegionsAsync(List<WorkoutRegion> workoutRegions);
+        Task<bool> BulkUpdateWorkoutRegionsAsync(Guid workoutId, List<WorkoutRegion> workoutRegions);
+        Task<bool> BulkSoftDeleteWorkoutRegionsAsync(Guid workoutId);
     }
 }

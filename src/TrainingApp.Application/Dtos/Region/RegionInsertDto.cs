@@ -1,6 +1,6 @@
-﻿namespace TrainingApp.Application.Dtos
+﻿namespace TrainingApp.Application.Dtos.Region
 {
-    public class RegionDto
+    public class RegionInsertDto
     {
         public string Name { get; set; }
         public string Description { get; set; }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TrainingApp.Application.Dtos;
+using TrainingApp.Application.Dtos.Region;
 using TrainingApp.Application.Services;
 using TrainingApp.Infrastructure.Interfaces;
 using TrainingApp.Shared.Helpers;
@@ -20,7 +20,7 @@ namespace TrainingApp.API.Controllers
         }
 
         [HttpPost("Insert")]
-        public IActionResult Insert([FromBody] ApiRequest<RegionDto> request)
+        public IActionResult Insert([FromBody] ApiRequest<RegionInsertDto> request)
         {
             try
             {

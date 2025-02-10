@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE trainingapp.AddWorkoutExercise(
-    p_WorkoutExerciseId CHAR(36),
-    p_WorkoutId CHAR(36),
-    p_ExerciseId CHAR(36),
-    p_CreatedBy CHAR(36),
-    p_CreatedAt DATETIME,
-    p_DeleteFlag BOOL
+    IN p_WorkoutExerciseId CHAR(36),
+    IN p_WorkoutId CHAR(36),
+    IN p_ExerciseId CHAR(36),
+    IN p_CreatedBy CHAR(36),
+    IN p_CreatedAt DATETIME,
+    IN p_DeleteFlag BOOL
 )
 BEGIN
     INSERT INTO WorkoutExercise (WorkoutExerciseId, WorkoutId, ExerciseId, CreatedBy, CreatedAt, DeleteFlag)
@@ -14,11 +14,11 @@ BEGIN
 END
 
 CREATE PROCEDURE trainingapp.UpdateWorkoutExercise(
-    p_WorkoutExerciseId CHAR(36),
-    p_WorkoutId CHAR(36),
-    p_ExerciseId CHAR(36),
-    p_UpdatedBy CHAR(36),
-    p_UpdatedAt DATETIME
+    IN p_WorkoutExerciseId CHAR(36),
+    IN p_WorkoutId CHAR(36),
+    IN p_ExerciseId CHAR(36),
+    IN p_UpdatedBy CHAR(36),
+    IN p_UpdatedAt DATETIME
 )
 BEGIN
     UPDATE WorkoutExercise
@@ -31,16 +31,70 @@ BEGIN
 	SELECT ROW_COUNT();
 END
 
-CREATE PROCEDURE trainingapp.DeleteWorkoutExercise(p_WorkoutExerciseId CHAR(36))
+CREATE PROCEDURE trainingapp.DeleteWorkoutExercise(IN p_WorkoutExerciseId CHAR(36))
 BEGIN
     UPDATE WorkoutExercise SET DeleteFlag = TRUE WHERE WorkoutExerciseId = p_WorkoutExerciseId;
 	SELECT ROW_COUNT();
 END
 
-CREATE PROCEDURE trainingapp.GetExercisesByWorkoutId(p_WorkoutId CHAR(36))
+CREATE PROCEDURE trainingapp.GetExercisesByWorkoutId(IN p_WorkoutId CHAR(36))
 BEGIN
     SELECT e.*
     FROM WorkoutExercise we
     JOIN Exercise e ON we.ExerciseId = e.ExerciseId
     WHERE we.WorkoutId = p_WorkoutId AND we.DeleteFlag = FALSE;
+END
+
+CREATE PROCEDURE trainingapp.BulkInsertWorkoutExercises(IN p_Values TEXT)
+BEGIN
+    SET @sql = CONCAT('INSERT INTO WorkoutExercise (WorkoutExerciseId, WorkoutId, ExerciseId, CreatedBy, CreatedAt, DeleteFlag) VALUES ', p_Values);
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+
+    SELECT ROW_COUNT();
+END
+
+CREATE PROCEDURE trainingapp.BulkUpdateWorkoutExercises(
+    IN p_WorkoutId CHAR(36),
+    IN p_Updates TEXT
+)
+BEGIN
+    -- Güncellenen değerleri içeren dinamik SQL sorgusu oluştur
+    SET @sql = CONCAT('
+        UPDATE WorkoutExercise 
+        SET 
+            ExerciseId = CASE WorkoutExerciseId ', p_Updates, ' END,
+            UpdatedAt = NOW()
+        WHERE WorkoutId = "', p_WorkoutId, '";
+    ');
+
+    -- Dinamik sorguyu çalıştır
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+    SELECT ROW_COUNT(); 
+END
+
+CREATE PROCEDURE trainingapp.BulkSoftDeleteWorkoutExercises(
+    IN p_ExerciseId CHAR(36)
+)
+BEGIN
+    START TRANSACTION;
+
+    -- Dinamik SQL oluştur
+    SET @sql = CONCAT('
+        UPDATE WorkoutExercise 
+        SET DeleteFlag = TRUE, UpdatedAt = NOW()
+        WHERE ExerciseId = "', p_ExerciseId, '";
+    ');
+
+    -- Sorguyu çalıştır
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+    
+    COMMIT;
+    
+    SELECT ROW_COUNT(); 
 END

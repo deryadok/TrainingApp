@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE trainingapp.AddExercise(
-    p_ExerciseId CHAR(36),
-    p_UserId CHAR(36),
-    p_TotalDuration INT,
-    p_CreatedBy CHAR(36),
-    p_CreatedAt DATETIME,
-    p_DeleteFlag BOOL
+    IN p_ExerciseId CHAR(36),
+    IN p_UserId CHAR(36),
+    IN p_TotalDuration INT,
+    IN p_CreatedBy CHAR(36),
+    IN p_CreatedAt DATETIME,
+    IN p_DeleteFlag BOOL
 )
 BEGIN
     INSERT INTO Exercise (ExerciseId, UserId, TotalDuration, CreatedBy, CreatedAt, DeleteFlag)
@@ -14,10 +14,10 @@ BEGIN
 END
 
 CREATE PROCEDURE trainingapp.UpdateExercise(
-    p_ExerciseId CHAR(36),
-    p_TotalDuration INT,
-    p_UpdatedBy CHAR(36),
-    p_UpdatedAt DATETIME
+    IN p_ExerciseId CHAR(36),
+    IN p_TotalDuration INT,
+    IN p_UpdatedBy CHAR(36),
+    IN p_UpdatedAt DATETIME
 )
 BEGIN
     UPDATE Exercise
@@ -29,13 +29,13 @@ BEGIN
 	SELECT ROW_COUNT();
 END
 
-CREATE PROCEDURE trainingapp.DeleteExercise(p_ExerciseId CHAR(36))
+CREATE PROCEDURE trainingapp.DeleteExercise(IN p_ExerciseId CHAR(36))
 BEGIN
     UPDATE Exercise SET DeleteFlag = TRUE WHERE ExerciseId = p_ExerciseId;
 	SELECT ROW_COUNT();
 END
 
-CREATE PROCEDURE trainingapp.GetExerciseById(p_ExerciseId CHAR(36))
+CREATE PROCEDURE trainingapp.GetExerciseById(IN p_ExerciseId CHAR(36))
 BEGIN
     SELECT * FROM Exercise WHERE ExerciseId = p_ExerciseId AND DeleteFlag = FALSE;
 END
