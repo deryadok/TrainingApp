@@ -28,14 +28,14 @@ BEGIN
         UpdatedAt = p_UpdatedAt
     WHERE WorkoutRegionId = p_WorkoutRegionId AND DeleteFlag = FALSE;
 	
-	SELECT @rows;
+	SELECT ROW_COUNT();
 END
 
 CREATE PROCEDURE trainingapp.DeleteWorkoutRegion(p_WorkoutRegionId CHAR(36))
 BEGIN
     UPDATE WorkoutRegion SET DeleteFlag = TRUE WHERE WorkoutRegionId = p_WorkoutRegionId;
 
-	SELECT @rows;
+	SELECT ROW_COUNT();
 END
 
 CREATE PROCEDURE trainingapp.GetRegionsByWorkoutId(p_WorkoutId CHAR(36))

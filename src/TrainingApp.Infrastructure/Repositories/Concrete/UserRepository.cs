@@ -26,12 +26,12 @@ namespace TrainingApp.Infrastructure.Concrete
                 parameters.Add("@Username", user.Username);
                 parameters.Add("@Email", user.Email);
                 parameters.Add("@Password", user.Password);
-                parameters.Add("@CreatedAt", DateTime.Now);
                 parameters.Add("@CreatedBy", user.CreatedBy);
+                parameters.Add("@CreatedAt", DateTime.Now);
                 parameters.Add("@DeleteFlag", user.DeleteFlag);
 
                 return await connection.ExecuteScalarAsync<Guid>(
-                    "CALL AddUser(@UserId, @Firstname, @Lastname, @Username, @Email, @Password, @CreatedAt, @CreatedBy, @DeleteFlag);",
+                    "CALL AddUser(@UserId, @Firstname, @Lastname, @Username, @Email, @Password, @CreatedBy, @CreatedAt, @DeleteFlag);",
                     parameters,
                     commandType: CommandType.Text
                 );
@@ -42,7 +42,7 @@ namespace TrainingApp.Infrastructure.Concrete
         {
             using (var connection = _dbContext.Connection)
             {
-                int affectedRows = await connection.ExecuteAsync(
+                int affectedRows = await connection.ExecuteScalarAsync<int>(
                     "CALL DeleteUser(@UserId);", new { UserId = id });
 
                 return affectedRows > 0;
@@ -79,7 +79,7 @@ namespace TrainingApp.Infrastructure.Concrete
                 parameters.Add("@UpdatedBy", user.UpdatedBy);
                 parameters.Add("@UpdatedAt", DateTime.Now);
 
-                int affectedRows = await connection.ExecuteAsync(
+                int affectedRows = await connection.ExecuteScalarAsync<int>(
                     "CALL UpdateUser(@UserId, @Firstname, @Lastname, @Username, @Email, @UpdatedBy, @UpdatedAt);",
                     parameters
                 );

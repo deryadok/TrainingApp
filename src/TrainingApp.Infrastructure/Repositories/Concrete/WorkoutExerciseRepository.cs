@@ -38,7 +38,7 @@ namespace TrainingApp.Infrastructure.Concrete
         {
             using (var connection = _dbContext.Connection)
             {
-                int affectedRows = await connection.ExecuteAsync(
+                int affectedRows = await connection.ExecuteScalarAsync<int>(
                     "CALL DeleteWorkoutExercise(@WorkoutExerciseId);", new { WorkoutExerciseId = id });
 
                 return affectedRows > 0;
@@ -73,7 +73,7 @@ namespace TrainingApp.Infrastructure.Concrete
                 parameters.Add("@UpdatedBy", workoutExercise.UpdatedBy);
                 parameters.Add("@UpdatedAt", DateTime.Now);
 
-                int affectedRows = await connection.ExecuteAsync(
+                int affectedRows = await connection.ExecuteScalarAsync<int>(
                     "CALL UpdateWorkoutExercise(@WorkoutExerciseId, @WorkoutId, @ExerciseId, @UpdatedBy, @UpdatedAt);",
                     parameters
                 );

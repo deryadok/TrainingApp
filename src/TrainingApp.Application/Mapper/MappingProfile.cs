@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TrainingApp.Application.Dtos;
+using TrainingApp.Application.Dtos.User;
 using TrainingApp.Domain.Entities;
 
 namespace TrainingApp.API.Mapper
@@ -10,6 +11,9 @@ namespace TrainingApp.API.Mapper
         {
             CreateMap<Workout, WorkoutDto>().ReverseMap();
             CreateMap<Region, RegionDto>().ReverseMap();
+
+            CreateMap<User, UserInsertDto>().ReverseMap();
+            CreateMap<User, UserUpdateDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
         }
     }

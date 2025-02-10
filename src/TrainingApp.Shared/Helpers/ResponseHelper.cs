@@ -19,7 +19,7 @@ namespace TrainingApp.Shared.Helpers
             {
                 Data = data,
                 Success = success,
-                Message = message
+                SuccessMessage = message
             };
         }
 
@@ -28,8 +28,43 @@ namespace TrainingApp.Shared.Helpers
             return new ApiResponse<T>()
             {
                 Success = success, 
-                Message = message
+                SuccessMessage = message
             };
+        }
+
+        public static ApiResponse<T> GetResponse(T data, bool success, string successMessage, string errorMessage)
+        {
+            if (success) 
+                return new ApiResponse<T>()
+                {
+                    Data = data,
+                    Success = success,
+                    SuccessMessage = successMessage
+                };
+            else
+                return new ApiResponse<T>()
+                {
+                    Success = success,
+                    ErrorMessage = errorMessage
+                };
+        }
+
+
+
+        public static ApiResponse<T> GetResponse(bool success, string successMessage, string errorMessage)
+        {
+            if (success)
+                return new ApiResponse<T>()
+                {
+                    Success = success,
+                    SuccessMessage = successMessage
+                };
+            else
+                return new ApiResponse<T>()
+                {
+                    Success = success,
+                    ErrorMessage = errorMessage
+                };
         }
     }
 }

@@ -28,13 +28,13 @@ BEGIN
         UpdatedAt = p_UpdatedAt
     WHERE RegionId = p_RegionId AND DeleteFlag = FALSE;
 
-	SELECT @rows;
+	SELECT ROW_COUNT();
 END
 
 CREATE PROCEDURE trainingapp.DeleteRegion(p_RegionId CHAR(36))
 BEGIN
     UPDATE Region SET DeleteFlag = TRUE WHERE RegionId = p_RegionId;
-	SELECT @rows;
+	SELECT ROW_COUNT();
 END
 
 CREATE PROCEDURE trainingapp.GetRegionById(p_RegionId CHAR(36))

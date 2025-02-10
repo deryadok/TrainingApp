@@ -3,7 +3,6 @@
     public class ApiRequest<T>
     {
         public T Payload { get; set; }
-        public DateTime RequestDate { get; set; } = DateTime.UtcNow;
 
         public ApiRequest()
         {

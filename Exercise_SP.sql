@@ -26,13 +26,13 @@ BEGIN
         UpdatedAt = p_UpdatedAt
     WHERE ExerciseId = p_ExerciseId AND DeleteFlag = FALSE;
 	
-	SELECT @rows;
+	SELECT ROW_COUNT();
 END
 
 CREATE PROCEDURE trainingapp.DeleteExercise(p_ExerciseId CHAR(36))
 BEGIN
     UPDATE Exercise SET DeleteFlag = TRUE WHERE ExerciseId = p_ExerciseId;
-	 	SELECT @rows;
+	SELECT ROW_COUNT();
 END
 
 CREATE PROCEDURE trainingapp.GetExerciseById(p_ExerciseId CHAR(36))

@@ -35,7 +35,7 @@ BEGIN
         UpdatedAt = p_UpdatedAt
     WHERE WorkoutId = p_WorkoutId;
 
-	SELECT @rows;
+	SELECT ROW_COUNT();
 end
 
 CREATE PROCEDURE trainingapp.DeleteWorkout(IN p_WorkoutId CHAR(36))
@@ -44,7 +44,7 @@ BEGIN
     SET DeleteFlag = TRUE 
     WHERE WorkoutId = p_WorkoutId;
 
-	SELECT @rows;
+	SELECT ROW_COUNT();
 end
 
 CREATE PROCEDURE trainingapp.GetAllWorkouts()
