@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using System.Data;
-using TrainingApp.Infrastructure.Interfaces;
 using TrainingApp.Domain.Entities;
 using TrainingApp.Infrastructure.Data;
+using TrainingApp.Infrastructure.Interfaces;
 
 namespace TrainingApp.Infrastructure.Concrete
 {
@@ -20,19 +20,20 @@ namespace TrainingApp.Infrastructure.Concrete
             using (var connection = _dbContext.Connection)
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("p_UserId", Guid.NewGuid().ToString());
-                parameters.Add("p_Firstname", user.Firstname);
-                parameters.Add("p_Lastname", user.Lastname);
-                parameters.Add("p_Username", user.Username);
-                parameters.Add("p_Email", user.Email);
-                parameters.Add("p_Password", user.Password);
-                parameters.Add("p_CreatedAt", DateTime.Now);
-                parameters.Add("p_DeleteFlag", user.DeleteFlag);
+                parameters.Add("@UserId", Guid.NewGuid().ToString());
+                parameters.Add("@Firstname", user.Firstname);
+                parameters.Add("@Lastname", user.Lastname);
+                parameters.Add("@Username", user.Username);
+                parameters.Add("@Email", user.Email);
+                parameters.Add("@Password", user.Password);
+                parameters.Add("@CreatedAt", DateTime.Now);
+                parameters.Add("@CreatedBy", user.CreatedBy);
+                parameters.Add("@DeleteFlag", user.DeleteFlag);
 
                 return await connection.ExecuteScalarAsync<Guid>(
-                    "AddUser;",
+                    "CALL AddUser(@UserId, @Firstname, @Lastname, @Username, @Email, @Password, @CreatedAt, @CreatedBy, @DeleteFlag);",
                     parameters,
-                    commandType: CommandType.StoredProcedure
+                    commandType: CommandType.Text
                 );
             }
         }
@@ -70,7 +71,7 @@ namespace TrainingApp.Infrastructure.Concrete
             using (var connection = _dbContext.Connection)
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@UserId", Guid.NewGuid().ToString());
+                parameters.Add("@UserId", user.UserId);
                 parameters.Add("@Firstname", user.Firstname);
                 parameters.Add("@Lastname", user.Lastname);
                 parameters.Add("@Username", user.Username);

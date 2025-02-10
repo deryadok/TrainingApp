@@ -17,9 +17,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingApp.Shared", "src\T
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B2F50C4B-33D5-4147-90BB-97D49DA55FED}"
 	ProjectSection(SolutionItems) = preProject
-		Init_Db.sql = Init_Db.sql
-		User_SP.sql = User_SP.sql
-		Workout_SP.sql = Workout_SP.sql
+		Exercise_SP.sql = Exercise_SP.sql
+		SQL\Init_Db.sql = SQL\Init_Db.sql
+		Region_SP.sql = Region_SP.sql
+		SQL\User_SP.sql = SQL\User_SP.sql
+		WorkoutExercise_SP.sql = WorkoutExercise_SP.sql
+		WorkoutRegion_SQL.sql = WorkoutRegion_SQL.sql
+		SQL\Workout_SP.sql = SQL\Workout_SP.sql
 	EndProjectSection
 EndProject
 Global

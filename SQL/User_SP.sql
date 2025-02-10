@@ -39,6 +39,8 @@ BEGIN
         UpdatedBy = p_UpdatedBy,
         UpdatedAt = p_UpdatedAt
     WHERE UserId = p_UserId AND DeleteFlag = FALSE;
+
+	SELECT @rows;
 END
 
 CREATE PROCEDURE trainingapp.DeleteUser(p_UserId CHAR(36))
@@ -46,6 +48,8 @@ BEGIN
     UPDATE User 
     SET DeleteFlag = TRUE 
     WHERE UserId = p_UserId;
+
+	SELECT @rows;
 END
 
 CREATE PROCEDURE trainingapp.GetAllUsers()
