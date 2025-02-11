@@ -4,7 +4,7 @@ using System.Data;
 
 namespace TrainingApp.Infrastructure.Data
 {
-    public class DapperDbContext : IDisposable
+    public class DapperDbContext
     {
         private readonly IDbConnection _dbConnection;
 
@@ -12,13 +12,16 @@ namespace TrainingApp.Infrastructure.Data
         {
             string connectionString = configuration.GetConnectionString("TrainingApp");
             _dbConnection = new MySqlConnection(connectionString);
+            if (_dbConnection?.State == ConnectionState.Closed)
+                _dbConnection.Open();
         }
 
         public IDbConnection Connection => _dbConnection;
 
         public void Dispose()
         {
-            _dbConnection?.Dispose();
+            if (_dbConnection?.State == ConnectionState.Open)
+                _dbConnection?.Close();
         }
     }
 }

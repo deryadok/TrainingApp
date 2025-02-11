@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrainingApp.Application.Dtos.User;
 using TrainingApp.Application.Services;
@@ -8,6 +9,7 @@ using TrainingApp.Shared.RequestModel;
 
 namespace TrainingApp.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : Controller

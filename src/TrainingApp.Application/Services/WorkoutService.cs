@@ -24,7 +24,7 @@ namespace TrainingApp.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ApiResponse<Guid>> AddWorkout(WorkoutInsertDto workoutDto)
+        public async Task<ApiResponse<Guid>> Add(WorkoutInsertDto workoutDto)
         {
             var workout = _mapper.Map<Workout>(workoutDto);
 
@@ -52,13 +52,11 @@ namespace TrainingApp.Application.Services
             return ResponseHelper<bool>.GetResponse(result, ResultMessages.UpdatedMessage, ResultMessages.FailMessage);
         }
 
-        public async Task<ApiResponse<bool>> Delete(Guid workoutDto)
+        public async Task<ApiResponse<bool>> Delete(Guid workoutId)
         {
-            var workout = _mapper.Map<Workout>(workoutDto);
+            var result = await _workoutRepository.DeleteWorkoutAsync(workoutId);
 
-            var result = await _workoutRepository.UpdateWorkoutAsync(workout);
-
-            _ = await _workoutRegionRepository.BulkSoftDeleteWorkoutRegionsAsync(workout.WorkoutId);
+            _ = await _workoutRegionRepository.BulkSoftDeleteWorkoutRegionsAsync(workoutId);
 
             return ResponseHelper<bool>.GetResponse(result, ResultMessages.DeletedMessage, ResultMessages.FailMessage);
         }
@@ -79,9 +77,26 @@ namespace TrainingApp.Application.Services
             return ResponseHelper<WorkoutDto>.GetResponse(returnModel, success, ResultMessages.SuccessMessage, ResultMessages.FailMessage);
         }
 
-        public async Task<ApiResponse<WorkoutDto>> GetFilteredResult()
+        public async Task<ApiResponse<IEnumerable<WorkoutDto>>> GetAllWorkouts()
         {
-            return null;
+            var workouts = await _workoutRepository.GetAllWorkoutsAsync();
+
+            var returnModel = _mapper.Map<IEnumerable<WorkoutDto>>(workouts);
+
+            bool success = returnModel != null && returnModel.Any();
+
+            return ResponseHelper<IEnumerable<WorkoutDto>>.GetResponse(returnModel, success, ResultMessages.SuccessMessage, ResultMessages.FailMessage);
+        }
+
+        public async Task<ApiResponse<IEnumerable<WorkoutDto>>> GetFilteredResult(WorkoutFilterDto workoutFilter)
+        {
+            var workouts = await _workoutRepository.GetFilteredWorkoutsAsync(workoutFilter.Duration, workoutFilter.DifficultyLevel, workoutFilter.Region.RegionId);
+
+            var returnModel = _mapper.Map<IEnumerable<WorkoutDto>>(workouts);
+
+            bool success = returnModel.Any();
+
+            return ResponseHelper<IEnumerable<WorkoutDto>>.GetResponse(returnModel, success, ResultMessages.SuccessMessage, ResultMessages.FailMessage);
         }
     }
 }

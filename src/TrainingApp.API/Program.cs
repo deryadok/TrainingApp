@@ -6,6 +6,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MySql.Data.MySqlClient;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<IDbConnection>(sp =>
+    new MySqlConnection(builder.Configuration.GetConnectionString("TrainingApp")));
 builder.Services.AddScoped<DapperDbContext>(provider =>
 {
     return new DapperDbContext(builder.Configuration);

@@ -16,11 +16,18 @@ namespace TrainingApp.Infrastructure.Concrete
 
         public async Task<User> GetUserByUsernameAsync(string username)
         {
-            using (var connection = _dbContext.Connection)
-            {
-                return await connection.QueryFirstOrDefaultAsync<User>(
-                    "GetUserByUsername", new { p_Username = username });
-            }
+            return await _dbContext.Connection.QueryFirstOrDefaultAsync<User>(
+                "GetUserByUsername", new { p_Username = username });
+
+        }
+
+        public async Task RegisterUserAsync(User user)
+        {
+            await _dbContext.Connection.ExecuteAsync(
+                "INSERT INTO User (UserId, Firstname, Lastname, Username, Email, Password, CreatedAt, CreatedBy, DeleteFlag) " +
+                "VALUES (@UserId, @Firstname, @Lastname, @Username, @Email, @Password, @CreatedAt, @CreatedBy, FALSE);",
+                user);
+
         }
     }
 }

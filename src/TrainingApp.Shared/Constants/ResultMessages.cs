@@ -7,5 +7,7 @@
         public static readonly string InsertMessage = "Record added successfully.";
         public static readonly string UpdatedMessage = "Record updated successfully.";
         public static readonly string DeletedMessage = "Record updated successfully.";
+        public static readonly string InvalidLoginMessage = "Username or password is invalid.";
+        public static readonly string UsernameInUseMessage = "This username has been taken.";
     }
 }
